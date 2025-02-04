@@ -15,7 +15,7 @@ let setId = id;// 뭐라고 설명하지
 /*-현재까지 문제점 (v 표시는 해결된 문제)
   
   -start버튼을 누를때 setInterval이 중복으로 적용되는 문제(v)
-  -stop을 눌렀을때 localStorage에 값이 덮어씌워지고 있는 문제
+  -stop을 눌렀을때 localStorage에 값이 덮어씌워지고 있는 문제(v)
   -새로고침시 초기화 되는 문제(v)
   -localStorage에서 값을 꺼낼시 중복으로 꺼내지는 문제 발생(v)
 */
@@ -89,24 +89,18 @@ document.querySelector('#stop').addEventListener('click',function(){
 
   // getTime이 존재하면 배열 형태로 변환, 없으면 빈 배열 생성
   let recordArray = getLocalStorageRecord ? JSON.parse(getLocalStorageRecord) : [];
-  
-  //
+  console.log(recordArray)
   let recordOrder = recordArray.findIndex( order => order.id == setId);
+
 
   // console.log(recordArray)
   //findIndex는 값이 존재하지 않을시 -1 반환
   if(recordOrder == -1){
-    // recordArray.push(Record);
-    recordArray=[...recordArray,Record];
+    recordArray.push(Record);
   }
-  // else{
-  //   recordArray=[...recordArray,Record];
-  // }
-// console.log(recordOrder)
+
 
 localStorage.setItem('fitTime', JSON.stringify(recordArray))
-
-
 
 
   // 화면에 기록을 뿌려줌
@@ -146,13 +140,15 @@ document.querySelector('#clear').addEventListener('click',function(){
   
   hour = 0;
   minute = 0;
-  seconds = 0;
+  seconds = 0; 
+  setId = 0;
+
 
   hourSpan.textContent = "0" + hour;
   minuteSpan.textContent = "0" + minute;
   secondSpan.textContent = "0" + seconds;
 
-  document.querySelector('.record-text').innerHTML = '';
+  document.querySelector('.record-text').textContent = '';
   console.log(hour, minute, seconds);
 })
 
@@ -162,9 +158,11 @@ window.onload = function(){
   let getLocalStorageRecord = localStorage.getItem('fitTime');
   let recordArray = getLocalStorageRecord ? JSON.parse(getLocalStorageRecord) : [];
 
+  setId = recordArray[recordArray.length-1].id;
+  console.log(setId)
   if(recordArray.length > 0){
-
-      recordArray.forEach((time,i) => {
+    
+    recordArray.forEach((recordTime,i) => {
         let template = `
                     <div>
                         <p>
