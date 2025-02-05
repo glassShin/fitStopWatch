@@ -1,12 +1,12 @@
 const hourSpan = document.querySelector('.fit-time p span:nth-child(1)');
 const minuteSpan = document.querySelector('.fit-time p span:nth-child(2)');
 const secondSpan = document.querySelector('.fit-time p span:nth-child(3)');
-const id = 0; //타이머 id값
+
+let setId = 0;
 let hour = 0;
 let minute = 0;
 let seconds = 0;
-let timer; //setIntervl을 담을 변수
-let setId = id;// 뭐라고 설명하지
+let timer;
 
 //setInterval, clearInterval,textContnet 블로그 파서 정리하기
 //깃허브 올리기
@@ -66,7 +66,7 @@ document.querySelector('#stop').classList.add('hide');
 document.querySelector('#start').addEventListener('click',function(){
   //버튼을 클릭하면 우선적으로 setInterval을 삭제
   //그러므로 여러번 버튼을 눌러도 기존에 있던 setInterval이 삭제 되므로 중복 실행 해결
-  clearInterval(timer);
+  // clearInterval(timer);
   timer = setInterval(startRecord,10)
 
   document.querySelector('#start').classList.add('hide');
@@ -87,7 +87,7 @@ document.querySelector('#stop').addEventListener('click',function(){
   //localStorage에서 꺼냄
   let getLocalStorageRecord = localStorage.getItem('fitTime')
 
-  // getTime이 존재하면 배열 형태로 변환, 없으면 빈 배열 생성
+  // getLocalStorageRecord가 존재하면 배열 형태로 변환, 없으면 빈 배열 생성
   let recordArray = getLocalStorageRecord ? JSON.parse(getLocalStorageRecord) : [];
   console.log(recordArray)
   let recordOrder = recordArray.findIndex( order => order.id == setId);
@@ -148,9 +148,14 @@ document.querySelector('#clear').addEventListener('click',function(){
   minuteSpan.textContent = "0" + minute;
   secondSpan.textContent = "0" + seconds;
 
+  document.querySelector('#stop').classList.add('hide');
+  document.querySelector('#start').classList.remove('hide');
+  
   document.querySelector('.record-text').textContent = '';
   console.log(hour, minute, seconds);
+
 })
+
 
 
 //화면 새로고침 시에도 기록이 남게 함
