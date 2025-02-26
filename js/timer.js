@@ -75,6 +75,7 @@ document.querySelector('#start').addEventListener('click',function(){
 
 
 
+
 //정지버튼
 document.querySelector('#stop').addEventListener('click',function(){
 
@@ -103,16 +104,21 @@ document.querySelector('#stop').addEventListener('click',function(){
 localStorage.setItem('fitTime', JSON.stringify(recordArray))
 
 
-  // 화면에 기록을 뿌려줌
+  // 화면에 기록을 렌더링
   if(recordArray){
-    document.querySelector('.record-text').innerHTML = ''
+    document.querySelector('.record-text-left').innerHTML = '';
+    document.querySelector('.record-text-right').innerHTML = '';
     recordArray.forEach((time,i) => {
         
-        let template = `
+      let template1 = 
+         `<div>
+              <p>
+                <span>${recordArray[i].id}</span>
+              </p>
+            </div> `;
+
+        let template2 = `
                     <div>
-                        <p>
-                          <span>${recordArray[i].id}</span>
-                        </p> 
                         <p>
                           <span>${recordArray[i].hour < 10 ? '0'+recordArray[i].hour : recordArray[i].hour}</span> :
                           <span>${recordArray[i].minute < 10 ? '0'+recordArray[i].minute : recordArray[i].minute}</span> :
@@ -120,8 +126,12 @@ localStorage.setItem('fitTime', JSON.stringify(recordArray))
                         </p>
                       </div>
                         `
+
+                        
       console.log(recordArray[i].id)                  
-    document.querySelector('.record-text').insertAdjacentHTML('beforeend',template);
+    document.querySelector('.record-text-left').insertAdjacentHTML('beforeend',template1);
+
+    document.querySelector('.record-text-right').insertAdjacentHTML('beforeend',template2);
 
     });
   }
@@ -151,7 +161,8 @@ document.querySelector('#clear').addEventListener('click',function(){
   document.querySelector('#stop').classList.add('hide');
   document.querySelector('#start').classList.remove('hide');
   
-  document.querySelector('.record-text').innerHTML = '';
+  document.querySelector('.record-text-left').innerHTML = '';
+  document.querySelector('.record-text-right').innerHTML = '';
   console.log(hour, minute, seconds);
 
 })
@@ -168,19 +179,27 @@ window.onload = function(){
   if(recordArray.length > 0){
     
     recordArray.forEach((recordTime,i) => {
-        let template = `
+        let template1 = `
                     <div>
                         <p>
                           <span>${recordArray[i].id}</span>
-                        </p> 
+                        </p>
+                    </div>
+                        `;
+    
+      let template2 = `<div> 
                         <p>
                           <span>${recordArray[i].hour < 10 ? '0'+recordArray[i].hour : recordArray[i].hour}</span> :
                           <span>${recordArray[i].minute < 10 ? '0'+recordArray[i].minute : recordArray[i].minute}</span> :
                           <span>${recordArray[i].seconds < 10 ? '0'+recordArray[i].seconds : recordArray[i].seconds}</span>
                         </p>
-                      </div>
-                        `
-    document.querySelector('.record-text').insertAdjacentHTML('beforeend',template);
+                      </div>  `
+
+
+
+    document.querySelector('.record-text-left').insertAdjacentHTML('beforeend',template1);
+    document.querySelector('.record-text-right').insertAdjacentHTML('beforeend',template2);
+
     
     });
   }
